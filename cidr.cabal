@@ -1,0 +1,64 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.31.2.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 104fe96c15ec8d8e67799c33fd2f2d425c72e21d212c3b18f5604ad7b2aec5d2
+
+name:           cidr
+version:        0.1.0.0
+category:       Web
+homepage:       https://github.com/leptonyu/cidr#readme
+author:         Daniel YU
+maintainer:     leptonyu@gmail.com
+copyright:      2019 Daniel YU
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+
+library
+  exposed-modules:
+      Network.Cidr
+  other-modules:
+      Paths_cidr
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , regex-pcre
+  default-language: Haskell2010
+
+executable cidr
+  main-is: Main.hs
+  other-modules:
+      Paths_cidr
+  hs-source-dirs:
+      main
+  build-depends:
+      base >=4.7 && <5
+    , cidr
+    , containers
+    , regex-pcre
+  default-language: Haskell2010
+
+test-suite spec
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Network.Cidr
+      Paths_cidr
+  hs-source-dirs:
+      test
+      src
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , containers
+    , hspec ==2.*
+    , hspec-core
+    , regex-pcre
+  default-language: Haskell2010

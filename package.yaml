@@ -1,0 +1,40 @@
+name:                cidr
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/leptonyu/cidr#readme
+license:             MIT
+author:              Daniel YU
+maintainer:          leptonyu@gmail.com
+copyright:           2019 Daniel YU
+category:            Web
+extra-source-files:
+- README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - regex-pcre
+  - containers
+
+tests:
+  spec:
+    main: Spec.hs
+    source-dirs:
+      - test
+      - src
+    dependencies:
+    - hspec == 2.*
+    - hspec-core
+    - QuickCheck
+
+library:
+  source-dirs:      src
+  exposed-modules:
+  - Network.Cidr
+
+executables:
+  cidr:
+    source-dirs:      main
+    main:             Main.hs
+    dependencies:
+    - cidr
