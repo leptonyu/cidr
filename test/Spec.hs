@@ -40,3 +40,6 @@ spec = do
     it "round 2" $ do
       reducePrefix fromPrefix "172.195.0.0/16\n69.195.160.0/24" `shouldBe` "69.195.160.0/24\n172.195.0.0/16\n"
       reducePrefix fromPrefix "69.195.160.0/24\n172.195.0.0/16" `shouldBe` "69.195.160.0/24\n172.195.0.0/16\n"
+    it "round 3" $ do
+      reducePrefix fromPrefix "2.0.0.0/7\n3.248.0.0/13" `shouldBe` "2.0.0.0/7\n"
+      reducePrefix fromPrefix "3.248.0.0/13\n2.0.0.0/7" `shouldBe` "2.0.0.0/7\n"

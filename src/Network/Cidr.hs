@@ -14,7 +14,7 @@ type CIDR = (Word32, Word32)
 type RANGE = (Word32, Word32)
 
 regexIp :: String
-regexIp = "(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)"
+regexIp = "^(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)"
 
 regexIpBlock :: String
 regexIpBlock = regexIp ++ "/(\\d+)"
@@ -74,13 +74,13 @@ merge ci@(p,l)
   = g2 (dualPrefix ci)
   . HM.filterWithKey (go $ toRange ci)
   where
-    go (f,t) k v = let (a,b) = toRange (k,v) in f >= a || t <= b
+    go (f,t) k v = let (a,b) = toRange (k,v) in not (f <= a && b <= t)
     g2 di@(pd,ld) mx
       | HM.lookup pd mx == Just ld = merge (succPrefix ci) $ HM.delete pd mx
       | otherwise = g3 (succPrefix ci) mx
     g3 cn@(_,0) m3 = HM.insert p l m3
     g3 cn@(a,b) m3 = case HM.lookup a m3 of
-      Just v -> m3
+      Just v -> if v <= b then m3 else HM.insert p l m3
       _      -> g3 (succPrefix cn) m3
 
 reducePrefix :: (String -> Maybe CIDR) -> String -> String
