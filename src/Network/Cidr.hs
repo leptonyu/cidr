@@ -2,18 +2,25 @@
 module Network.Cidr where
 
 import           Data.Bits
-import           Data.List       (intercalate)
+import           Data.List       (foldl', intercalate)
 import qualified Data.Map.Strict as HM
-import qualified Data.Set        as HS
 import           Data.Word
 import           Text.Regex.PCRE
 
-import Debug.Trace
+import           Debug.Trace
 
 type CIDR = (Word32, Word32)
 
+type RANGE = (Word32, Word32)
+
+regexIp :: String
+regexIp = "(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)"
+
+regexIpBlock :: String
+regexIpBlock = regexIp ++ "/(\\d+)"
+
 fromPrefix :: String -> Maybe CIDR
-fromPrefix ips = case ips =~ "(\\d+)\\.(\\d+)\\.(\\d+)\\.(\\d+)/(\\d+)" :: (String,String,String,[String]) of
+fromPrefix ips = case ips =~ regexIpBlock :: (String,String,String,[String]) of
   (_,_,_,[a,b,c,d,e]) ->
     let ip = shift (read a) 24 + shift (read b) 16 + shift (read c) 8 + read d
     in Just $ normalizePrefix (ip, read e)
@@ -31,8 +38,23 @@ dualPrefix (a,b) = let x = shift 1 (fromIntegral $ 32 - b) in normalizePrefix (i
 succPrefix :: CIDR -> CIDR
 succPrefix (a, b) = normalizePrefix (a, b - 1)
 
-rangePrefix :: CIDR -> (Word32, Word32)
-rangePrefix (p,l) = (p, p + (shift 1 (32 - fromIntegral l)))
+toRange :: CIDR -> RANGE
+toRange (p, 0) = (p, maxBound)
+toRange (p, l) = (p, p + (shift 1 (32 - fromIntegral l) - 1))
+
+isLocal :: CIDR -> Bool
+isLocal = go . toRange
+  where
+    go (f, t) = (f >= 167772160 && t <= 184549375)
+      || (f >= 2886729728 && t <= 2887778303)
+      || (f >= 3232235520 && t <= 3232301055)
+
+
+fromRange :: RANGE -> Maybe CIDR
+fromRange (f, t)
+  | t - f == maxBound = Just (0, 0)
+  | f > t  || popCount (t - f + 1) /= 1  = Nothing
+  | otherwise = Just (f, fromIntegral $ countLeadingZeros (t - f))
 
 toPrefix :: CIDR -> String
 toPrefix (nid, plen) =
@@ -45,20 +67,41 @@ toPrefix (nid, plen) =
 toBinaryPrefix :: CIDR -> String
 toBinaryPrefix (i, x) = fmap (\a -> if shift 1 (32-a) .&. i == 0 then '0' else '1') [1..32] ++ "/" ++ show x
 
-
 type SET = HM.Map Word32 Word32
 
 merge :: CIDR -> SET -> SET
 merge ci@(p,l)
   = g2 (dualPrefix ci)
-  . HM.filterWithKey (go $ rangePrefix ci)
+  . HM.filterWithKey (go $ toRange ci)
   where
-    go (f,t) k v = k < f || (t /= 0 && k >= t)
+    go (f,t) k v = let (a,b) = toRange (k,v) in f >= a || t <= b
     g2 di@(pd,ld) mx
       | HM.lookup pd mx == Just ld = merge (succPrefix ci) $ HM.delete pd mx
-      | otherwise = g3 [1..fromIntegral l] mx
-    g3 []     s = HM.insert p l s
-    g3 (i:is) s =
-      let (a,b) = normalizePrefix (p, i)
-      in if HM.lookup a s == Just b then s else g3 is s
+      | otherwise = g3 (succPrefix ci) mx
+    g3 cn@(_,0) m3 = HM.insert p l m3
+    g3 cn@(a,b) m3 = case HM.lookup a m3 of
+      Just v -> m3
+      _      -> g3 (succPrefix cn) m3
+
+reducePrefix :: (String -> Maybe CIDR) -> String -> String
+reducePrefix f = unlines . map toPrefix . HM.toList . foldl' go HM.empty . lines
+  where
+    go ma s = case f s of
+      Just a -> merge (normalizePrefix a) ma
+      _      -> ma
+
+type CountryCode = String
+
+loadCsv :: String -> Maybe (CIDR, CountryCode)
+loadCsv s = case s =~ "\"(\\d+)\",\"(\\d+)\",\"([-a-zA-Z]+)\",\"(.+?)\"" :: (String,String,String,[String]) of
+  (_,_,_,[f,t,c,_]) -> case fromRange (read f, read t) of
+    Just ip -> Just (ip, c)
+    _       -> Nothing
+  _ -> Nothing
+
+loadCsvByCountry :: String -> String -> Maybe CIDR
+loadCsvByCountry cc s = case loadCsv s of
+  Just (ip, c) -> if c == cc then Just ip else Nothing
+  _            -> fromPrefix s
+
 

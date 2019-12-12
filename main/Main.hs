@@ -1,12 +1,12 @@
 module Main where
 
-import           Data.List       (foldl')
-import qualified Data.Map.Strict as HM
 import           Network.Cidr
+import           System.Environment
 
 main :: IO ()
-main = interact $ unlines . map toPrefix . HM.toList . foldl' go HM.empty . lines
+main = do
+  args <- getArgs
+  interact (reducePrefix $ loadCsvByCountry $ go args)
   where
-    go m s = case fromPrefix s of
-      Just a -> merge (normalizePrefix a) m
-      _      -> m
+    go []    = "US"
+    go (a:_) = a
