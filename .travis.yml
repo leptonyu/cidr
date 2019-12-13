@@ -4,6 +4,9 @@ cache:
   directories:
   - "$HOME/.cabal/store"
 cabal: 3.0
+os:
+- linux
+- osx
 ghc:
 - 8.8.1
 install:
@@ -13,9 +16,11 @@ script:
 - cabal v2-update
 - cabal v2-build all
 - cabal v2-test --enable-test all
-- cabal v2-install --enable-static all 
+- cabal v2-install --enable-static all
 deploy:
   provider: releases
-  file: "$HOME/.cabal/bin/cidr"
   api_key:
-    secure: JriLhuraSdoHwg8r8KdMXojbHXXS0kv1R1F24Y+Zo5elTuzd+VXfIFDFXe6Bn831nEWBh6w7LCYZnCHGHN0wd0iRBM2aSu7lhBY9rT1+9jGlOt2J6gT8Nw9hMr/p/3p71ktsHlTdfaqY8jrUE5y5Rd1p8WSmzRbxgLllV6j617HdoCzl9qm6ifHTJJL6FXcQrFGFTC467xufCVQevBH0gOmp6mcb0roOa03ikf+FevYz8IFsOeb2dwWMA3VGYUM7wiZdnSNxzOg7C9NMoa0CgcBda3x/GNldYU0mAFzwWXouMVGmfSyYtfv7Htyp2uYP/ACcaBeVHbJtDtgFHVCEm+7hMpJ++eFwrx5ka6sWzbC4zYQOSzU41IG/3XWMyJQf9Z3lyGeqUnd1uCYwh3scCLjH4bELPfW8UJIRglLDJX9sIiBZ/hEosx4Upk8yoxXnydmprhLjy41m4clCs3dZ1oEHwd7cpiUKE4fmOHbZcQJMp/dPagZLcF3bgXbYuocx+5haivTIhbcU43yT75eIPS2/ri+9N4cNWz75gGIw0WKGu7Xhb1LcRtAFvO1Sgr12+orNsGgfDygFrbYJnvOljxKlEJSL+51OA4DWkQr7LQuzegphrcgNDBp5scAxsv2g6BopMdZnTEuCfVvdazRzkqMdOcV5MjMBwjaojJpmZ38=
+    secure: oXKtWnYJPu6xf/jzXzVrL144Jdb0wDp10uHYaWOrG+U91WCJemWZaKnkKG1nB8s5eo49m1KVSjN78dKRz4j7ggNqxenPMzhPGRY6hmz/Jb2WmmMua4alU11nfLFhm8XcAlJVmGR2K370VVz6nBb/eUoj4EkUGGfXgSjfnTDN2zPAJ+KEosSkMnmYOcpcNh8yVb0d60JqMA0cXgxQj+3Kz9bbRprHXTgnwDzkwDSDP86n75b1CLp77EfGBql3yS5kmVbOwC0vm3AHtPGGcq0HNXnR0IH0eUYBq+HCrWbV3B/TUiXixHAKXpQ8rgPjdcdeUcj2ZyyswlhY6fd2IdlG8yi9oc4OVU2wCm7U63ujlGzGY72dC7I0vcVo+GEr7lcrxe1hRfDFJrsx2cHuLGXMOvf3cUwtLNiCLLYp7i8xcC2gSoQEWgYYzn4+U7HCWQ2TTmdk8G0czUWsoHtOQNQjfn5KHpeQ0aNka2oV40AjDHI6UhXP7EmvVBL2/wRLWLwqALNF+1+wG7wFJXYa1jievB8bMJf1HMPh1fHwpK24e9/HT0DusYeA+qYWClm57yycHQxlEVG0V+7OHZpyeRpCQxHnKwo0xbx6E/0RCuazTYeNB52Ur05Wffq5M+InsyP3Osm/QhwRzIbbAmEOZLPl7pkE0/R2m4/SDUC5J/m9LWg=
+  file: cidr
+  on:
+    repo: leptonyu/cidr
