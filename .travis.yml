@@ -10,10 +10,10 @@ install:
 - cabal --version
 - ghc --version
 script:
-- cabal v2-update
-- cabal v2-build all
-- cabal v2-test --enable-test all
-- cabal v2-install --enable-static --enable-executable-static all
+- cabal new-update
+- cabal new-build all
+- cabal new-test --enable-test all
+- cabal new-install --enable-static --enable-executable-static all
 deploy:
   provider: releases
   api_key:
