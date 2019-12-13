@@ -54,6 +54,11 @@ packages:
 # require-stack-version: -any # Default
 # require-stack-version: ">=2.1"
 #
+nix:
+  packages:
+  - gmp
+  - pcre
+  - libffi
 # Override the architecture used by stack, especially useful on Windows
 # arch: i386
 # arch: x86_64

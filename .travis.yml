@@ -21,6 +21,6 @@ deploy:
   provider: releases
   api_key:
     secure: oXKtWnYJPu6xf/jzXzVrL144Jdb0wDp10uHYaWOrG+U91WCJemWZaKnkKG1nB8s5eo49m1KVSjN78dKRz4j7ggNqxenPMzhPGRY6hmz/Jb2WmmMua4alU11nfLFhm8XcAlJVmGR2K370VVz6nBb/eUoj4EkUGGfXgSjfnTDN2zPAJ+KEosSkMnmYOcpcNh8yVb0d60JqMA0cXgxQj+3Kz9bbRprHXTgnwDzkwDSDP86n75b1CLp77EfGBql3yS5kmVbOwC0vm3AHtPGGcq0HNXnR0IH0eUYBq+HCrWbV3B/TUiXixHAKXpQ8rgPjdcdeUcj2ZyyswlhY6fd2IdlG8yi9oc4OVU2wCm7U63ujlGzGY72dC7I0vcVo+GEr7lcrxe1hRfDFJrsx2cHuLGXMOvf3cUwtLNiCLLYp7i8xcC2gSoQEWgYYzn4+U7HCWQ2TTmdk8G0czUWsoHtOQNQjfn5KHpeQ0aNka2oV40AjDHI6UhXP7EmvVBL2/wRLWLwqALNF+1+wG7wFJXYa1jievB8bMJf1HMPh1fHwpK24e9/HT0DusYeA+qYWClm57yycHQxlEVG0V+7OHZpyeRpCQxHnKwo0xbx6E/0RCuazTYeNB52Ur05Wffq5M+InsyP3Osm/QhwRzIbbAmEOZLPl7pkE0/R2m4/SDUC5J/m9LWg=
-  file: cidr
+  file: ~/.cabal/bin/cidr
   on:
     repo: leptonyu/cidr
