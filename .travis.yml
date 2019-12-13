@@ -13,7 +13,7 @@ script:
 - cabal new-update
 - cabal new-build all
 - cabal new-test --enable-test all
-- cabal new-install --enable-static --enable-executable-static --ghc-options=-static all
+- cabal new-install --enable-static --enable-executable-static --ghc-options=-static --ghc-options=-fPIC all
 deploy:
   provider: releases
   api_key:
