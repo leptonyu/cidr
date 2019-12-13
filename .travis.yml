@@ -1,0 +1,21 @@
+language: haskell
+sudo: enabled
+cache:
+  directories:
+  - "$HOME/.cabal/store"
+cabal: 3.0
+ghc:
+- 8.8.1
+install:
+- cabal --version
+- ghc --version
+script:
+- cabal v2-update
+- cabal v2-build all
+- cabal v2-test --enable-test all
+- cabal v2-install --enable-static all 
+deploy:
+  provider: releases
+  file: "$HOME/.cabal/bin/cidr"
+  api_key:
+    secure: JriLhuraSdoHwg8r8KdMXojbHXXS0kv1R1F24Y+Zo5elTuzd+VXfIFDFXe6Bn831nEWBh6w7LCYZnCHGHN0wd0iRBM2aSu7lhBY9rT1+9jGlOt2J6gT8Nw9hMr/p/3p71ktsHlTdfaqY8jrUE5y5Rd1p8WSmzRbxgLllV6j617HdoCzl9qm6ifHTJJL6FXcQrFGFTC467xufCVQevBH0gOmp6mcb0roOa03ikf+FevYz8IFsOeb2dwWMA3VGYUM7wiZdnSNxzOg7C9NMoa0CgcBda3x/GNldYU0mAFzwWXouMVGmfSyYtfv7Htyp2uYP/ACcaBeVHbJtDtgFHVCEm+7hMpJ++eFwrx5ka6sWzbC4zYQOSzU41IG/3XWMyJQf9Z3lyGeqUnd1uCYwh3scCLjH4bELPfW8UJIRglLDJX9sIiBZ/hEosx4Upk8yoxXnydmprhLjy41m4clCs3dZ1oEHwd7cpiUKE4fmOHbZcQJMp/dPagZLcF3bgXbYuocx+5haivTIhbcU43yT75eIPS2/ri+9N4cNWz75gGIw0WKGu7Xhb1LcRtAFvO1Sgr12+orNsGgfDygFrbYJnvOljxKlEJSL+51OA4DWkQr7LQuzegphrcgNDBp5scAxsv2g6BopMdZnTEuCfVvdazRzkqMdOcV5MjMBwjaojJpmZ38=
