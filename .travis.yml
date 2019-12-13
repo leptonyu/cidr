@@ -4,8 +4,6 @@ cache:
   directories:
   - "$HOME/.cabal/store"
 cabal: 3.0
-os:
-- linux
 ghc:
 - 8.8.1
 install:
@@ -15,7 +13,7 @@ script:
 - cabal v2-update
 - cabal v2-build all
 - cabal v2-test --enable-test all
-- cabal v2-install --enable-static all
+- cabal v2-install --enable-static --enable-executable-static all
 deploy:
   provider: releases
   api_key:
